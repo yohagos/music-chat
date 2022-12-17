@@ -7,3 +7,8 @@ class MusicBase(BaseModel):
     title: str
     path: str
     uploadedBy: str
+
+class ShowMusic(MusicBase):
+    artist: str
+    title: str
+    uploadedBy: str
