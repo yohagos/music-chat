@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+sqlalchemy
+bcrypt
+python-jose
+python-decouple
+python-multipart
+passlib
+pydantic
+psycopg2-binary
+pytest
+playsound
