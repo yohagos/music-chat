@@ -4,10 +4,8 @@ from decouple import config
 path = config('MUSIC_FOLDER')
 
 def checkMusicFolder():
-    print('check music function')
     if not os.path.exists(path):
         os.makedirs(path)
-    print('check music function - end')
 
 def createUserFolderForMusic(username: str):
     new_path = path+'/'+username

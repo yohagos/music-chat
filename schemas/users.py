@@ -6,7 +6,16 @@ class UserBase(BaseModel):
     password: str
 
 class ShowUser(UserBase):
-    username: str
+    class Config():
+        orm_mode = True
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
 
 class TokenData(BaseModel):
     username: Optional[str] = None
+
+class Login(BaseModel):
+    username: str
+    password: str

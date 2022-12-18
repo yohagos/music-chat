@@ -6,8 +6,8 @@ from jose import jwt, JWTError
 
 from schemas.users import TokenData
 
-SECRET = config('SECRET')[:-2]
-ALGORITHM = config('ALGORITHM')[:-2]
+SECRET = config('SECRET')
+ALGORITHM = config('ALGORITHM')
 Expire = 60
 
 def create_access_token(data: dict, expire_delta: Union[timedelta, None] = None):
