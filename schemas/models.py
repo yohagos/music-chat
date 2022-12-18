@@ -18,6 +18,7 @@ class Music(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String)
     artitst = Column(String)
+    genre = Column(String)
     path = Column(String)
     uploadedBy = Column(String, ForeignKey('user.username'))
 

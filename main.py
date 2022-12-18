@@ -4,6 +4,10 @@ from routes import users, music
 from database.db import engine
 from schemas.models import Base
 
+from utitlities.util import checkMusicFolder
+
+checkMusicFolder()
+
 app = FastAPI()
 
 app.include_router(users.router)

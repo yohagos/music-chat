@@ -11,7 +11,7 @@ router = APIRouter(
 )
 
 @router.post('', response_model=ShowMusic)
-def add_new_song(request: MusicBase, db: Session = Depends(get_db)):
+async def add_new_song(request: MusicBase, db: Session = Depends(get_db)):
     pass
 
 @router.get('', response_model=ShowMusic)

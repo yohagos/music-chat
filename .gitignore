@@ -1,2 +1,9 @@
 # Python 
 __pyc*
+__init__.py
+
+# Config
+.env
+
+# Folders
+/Music
