@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from typing import List
 
+from schemas.users import UserBase
 from schemas.music import MusicBase, ShowMusic
 from database.db import get_db
 
@@ -11,7 +12,7 @@ router = APIRouter(
 )
 
 @router.post('', response_model=ShowMusic)
-async def add_new_song(request: MusicBase, db: Session = Depends(get_db)):
+async def add_new_song(request: MusicBase, db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
     pass
 
 @router.get('', response_model=ShowMusic)
