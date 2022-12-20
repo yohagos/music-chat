@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, UploadFile, File
+from fastapi import APIRouter, Depends, UploadFile, File, Form
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -13,9 +13,12 @@ router = APIRouter(
     tags=['Music']
 )
 
-@router.post('')
-def add_new_song(request: MusicUpload, file: UploadFile = File(...), db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
+@router.post('/add_song')
+async def add_new_song(_artist: str = Form(...), _title: str = Form(...), _genre: str = Form(...), 
+                        file: bytes = File(...), db: Session = Depends(get_db), 
+                        current_user: UserBase = Depends(get_current_user)):
     print('testing.....')
+    request: MusicUpload = MusicUpload(artist = _artist, title = _title, genre = _genre)
     return save_song(request, file, db)
 
 # @router.get('', response_model=ShowMusic)
