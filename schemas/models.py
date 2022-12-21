@@ -17,9 +17,9 @@ class Music(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String)
-    artitst = Column(String)
+    artist = Column(String)
     genre = Column(String)
     path = Column(String)
-    uploadedBy = Column(String, ForeignKey('users.username'))
+    uploaded_by = Column(String, ForeignKey('users.username'))
 
     creator = relationship('User', back_populates='music')

@@ -23,10 +23,10 @@ def create_access_token(data: dict, expire_delta: Union[timedelta, None] = None)
 def verify_token(token: str, credentials_exception):
     try: 
         payload = jwt.decode(token, SECRET, algorithms=[ALGORITHM])
-        email: str = payload.get('sub')
-        if email is None:
+        username: str = payload.get('sub')
+        if username is None:
             raise credentials_exception
-        token_data = TokenData(email=email)
+        token_data = TokenData(username=username)
     except JWTError:
         raise credentials_exception
 

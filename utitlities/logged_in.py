@@ -1,11 +1,12 @@
 from sqlalchemy.orm import Session
 
 from schemas.models import User
+from . import logged_in
 
-logged_in: str
+log_in: str
 
 def set_logged_in(user: str):
-    logged_in = user
+    logged_in.log_in = user
 
-def get_user(db: Session):
-    return db.query(User).filter(User.email == logged_in).first()
+def get_user():
+    return log_in
