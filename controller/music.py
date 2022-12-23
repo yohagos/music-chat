@@ -1,11 +1,9 @@
-from fastapi import status, HTTPException, UploadFile, File
+from fastapi import status, HTTPException
 from sqlalchemy.orm import Session
-import shutil
 
 from schemas.models import Music
 
-def save_song(title: str, artist: str, genre: str, user: str, path: str, file: UploadFile, db: Session):
-    print('create_song')
+def save_song(title: str, artist: str, genre: str, user: str, path: str, db: Session):
     request: Music = Music( title=title, genre=genre, path=path, uploaded_by=user, artist=artist)
     song = db.query(Music).filter(Music.artist == request.artist , Music.title == request.title).first()
     if song:
