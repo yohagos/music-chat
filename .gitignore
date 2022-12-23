@@ -5,5 +5,8 @@ __init__.py
 # Config
 .env
 
+# db
+./music.db
+
 # Folders
 /Music
