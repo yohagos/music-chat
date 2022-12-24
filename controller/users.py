@@ -1,5 +1,5 @@
 from fastapi import status, HTTPException
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, object_mapper, exc
 
 from schemas.users import UserBase
 from schemas.models import User as UserModel, Music as MusicModel
