@@ -1,5 +1,5 @@
 from fastapi import status, HTTPException
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, object_mapper, exc
 
 from schemas.users import UserBase
 from schemas.models import User as UserModel, Music as MusicModel
@@ -25,14 +25,19 @@ def get_user_by_id(id: int, db: Session):
 
 def remove_user(db: Session):
     user = get_user()
-    print(user)
     current_user = db.query(UserModel).filter(UserModel.username == user).delete(synchronize_session="evaluate")
-    #db.delete(current_user)
-    print(current_user)
+    db.commit()
     return current_user, user
     
 def remove_all(db: Session):
-    removed_user, user = remove_user(db)
+    user = get_user()
     songs = db.query(MusicModel).filter(MusicModel.uploaded_by == user).all()
-    db.delete(songs)
-    return removed_user, songs
+    try:
+        object_mapper(songs)
+        db.delete(songs)
+    except (exc.UnmappedInstanceError):
+        return False
+    finally:
+        return user, songs
+    
+    #remove_user(db)

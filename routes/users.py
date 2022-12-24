@@ -5,7 +5,7 @@ from typing import List
 from schemas.users import UserBase, ShowUser
 from authentication.oauth2 import get_current_user
 from database.db import get_db
-from controller.users import get_user_by_id, create_user, remove_user
+from controller.users import get_user_by_id, create_user, remove_user, remove_all
 
 router = APIRouter(
     prefix='/user',
@@ -27,4 +27,4 @@ def delete_account(db: Session = Depends(get_db),current_user: UserBase = Depend
 
 @router.delete('/delete/all')
 def delete_account_and_songs(db: Session = Depends(get_db),current_user: UserBase = Depends(get_current_user)):
-    return remove_user(db)
+    return remove_all(db)
