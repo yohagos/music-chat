@@ -23,3 +23,11 @@ class Music(Base):
     uploaded_by = Column(String, ForeignKey('users.username'))
 
     creator = relationship('User', back_populates='music')
+
+class History(Base):
+    __tablename__ = "history"
+
+    id = Column(Integer, primary_key=True, index=True)
+    
+    song_added = Column(Integer, ForeignKey('music.id'))
+    added_by = Column(String, ForeignKey('users.username'))
