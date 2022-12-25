@@ -24,7 +24,6 @@ def get_user_by_id(id: int, db: Session):
     return user
 
 def all_users(db: Session):
-    print('test')
     return db.query(UserModel).all()
 
 def remove_user(db: Session):
