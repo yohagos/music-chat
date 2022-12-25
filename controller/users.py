@@ -23,6 +23,10 @@ def get_user_by_id(id: int, db: Session):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'User with ID {id} not found')
     return user
 
+def all_users(db: Session):
+    print('test')
+    return db.query(UserModel).all()
+
 def remove_user(db: Session):
     user = get_user()
     db.query(UserModel).filter(UserModel.username == user).delete(synchronize_session="evaluate")

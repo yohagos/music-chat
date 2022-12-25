@@ -19,3 +19,6 @@ def create_song(user: str, path: str):
     with open(path, 'wb+') as buffer:
         print(f'{user} added a new song')
     buffer.close()
+
+def all_songs(db: Session):
+    return db.query(Music).all()

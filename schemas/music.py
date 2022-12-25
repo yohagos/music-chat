@@ -6,18 +6,23 @@ class MusicBase(BaseModel):
     title: str
     genre: str
     path: str
-    uploadedBy: str
+    uploaded_by: str
+
+class MusicList(BaseModel):
+    artist: str
+    title: str
+    genre: str
+    uploaded_by: str
+    
+class Music(MusicBase):
+    class Config():
+        orm_mode = True
 
 class MusicUpload(BaseModel):
     artist: str
     title: str
     genre: str
 
-class ShowMusic(MusicBase):
-    artist: str
-    title: str
-    genre: str
-    uploadedBy: str
-
+class ShowMusic(MusicList):
     class Config():
         orm_mode = True
