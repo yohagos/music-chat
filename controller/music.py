@@ -14,14 +14,11 @@ def save_song(title: str, artist: str, genre: str, user: str, path: str, db: Ses
     db.commit()
     db.refresh(new_song)
     create_song(request.uploaded_by, request.path)
-    print(new_song)
-    new_song_added(user)
+    new_song_added(user, new_song.id, db)
     return new_song
 
 def create_song(user: str, path: str):
-    with open(path, 'wb+') as buffer:
-        print(f'{user} added a new song')
-    buffer.close()
+    open(path, 'wb+')
 
 def all_songs(db: Session):
     return db.query(Music).all()

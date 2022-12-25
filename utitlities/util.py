@@ -1,4 +1,4 @@
-import os
+import os, shutil
 from decouple import config
 
 path = config('MUSIC_FOLDER')
@@ -15,3 +15,11 @@ def createUserFolderForMusic(username: str):
 
 def getPath():
     return path
+
+def deleteUserFolder(user: str):
+    print(path)
+    print(user)
+    user_path = os.path.join(path, user)
+    print(user_path)
+    print()
+    shutil.rmtree(user_path)

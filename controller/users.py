@@ -5,6 +5,7 @@ from schemas.users import UserBase
 from schemas.models import User as UserModel, Music as MusicModel
 from hashing.hash import get_password_hashed
 from utitlities.logged_in import get_user
+from utitlities.util import deleteUserFolder
 
 def create_user(request: UserBase, db: Session):
     user = db.query(UserModel).filter(UserModel.username == request.username).first()
@@ -37,3 +38,4 @@ def remove_all(db: Session):
     db.query(MusicModel).filter(MusicModel.uploaded_by == user).delete()
     db.commit()
     remove_user(db)
+    deleteUserFolder(user)
