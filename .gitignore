@@ -6,7 +6,7 @@ __init__.py
 .env
 
 # db
-./music.db
+*.db
 
 # Folders
 /Music

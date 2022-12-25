@@ -1,9 +1,10 @@
 from fastapi import status, HTTPException
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, object_mapper, exc
 
 from schemas.users import UserBase
-from schemas.models import User as UserModel
+from schemas.models import User as UserModel, Music as MusicModel
 from hashing.hash import get_password_hashed
+from utitlities.logged_in import get_user
 
 def create_user(request: UserBase, db: Session):
     user = db.query(UserModel).filter(UserModel.username == request.username).first()
@@ -21,3 +22,19 @@ def get_user_by_id(id: int, db: Session):
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'User with ID {id} not found')
     return user
+
+def all_users(db: Session):
+    print('test')
+    return db.query(UserModel).all()
+
+def remove_user(db: Session):
+    user = get_user()
+    db.query(UserModel).filter(UserModel.username == user).delete(synchronize_session="evaluate")
+    db.commit()
+    return user
+    
+def remove_all(db: Session):
+    user = get_user()
+    db.query(MusicModel).filter(MusicModel.uploaded_by == user).delete()
+    db.commit()
+    remove_user(db)

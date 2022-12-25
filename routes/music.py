@@ -4,8 +4,8 @@ from typing import List
 import os
 
 from schemas.users import UserBase
-from schemas.models import Music
-from controller.music import save_song
+from schemas.music import ShowMusic
+from controller.music import save_song, all_songs
 from database.db import get_db
 from authentication.oauth2 import get_current_user
 from utitlities.logged_in import get_user
@@ -23,4 +23,8 @@ async def add_new_song( new_title: str = Form(...), new_artist: str = Form(...),
     user = get_user()
     createUserFolderForMusic(user)
     dest_path = os.path.join(getPath(), user, file.filename)
-    return save_song(new_title, new_artist, new_genre, user, dest_path, file, db)
+    return save_song(new_title, new_artist, new_genre, user, dest_path, db)
+
+@router.get('/all', response_model=List[ShowMusic])
+def get_all_songs(db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
+    return all_songs(db)
