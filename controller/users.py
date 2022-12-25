@@ -25,19 +25,12 @@ def get_user_by_id(id: int, db: Session):
 
 def remove_user(db: Session):
     user = get_user()
-    current_user = db.query(UserModel).filter(UserModel.username == user).delete(synchronize_session="evaluate")
+    db.query(UserModel).filter(UserModel.username == user).delete(synchronize_session="evaluate")
     db.commit()
-    return current_user, user
+    return user
     
 def remove_all(db: Session):
     user = get_user()
-    songs = db.query(MusicModel).filter(MusicModel.uploaded_by == user).all()
-    try:
-        object_mapper(songs)
-        db.delete(songs)
-    except (exc.UnmappedInstanceError):
-        return False
-    finally:
-        return user, songs
-    
-    #remove_user(db)
+    db.query(MusicModel).filter(MusicModel.uploaded_by == user).delete()
+    db.commit()
+    remove_user(db)

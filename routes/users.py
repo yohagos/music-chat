@@ -22,7 +22,7 @@ def create_new_user(request: UserBase, db: Session = Depends(get_db)):
 
 @router.delete('/delete')
 def delete_account(db: Session = Depends(get_db),current_user: UserBase = Depends(get_current_user)):
-    result, _ = remove_user(db)
+    result = remove_user(db)
     return result
 
 @router.delete('/delete/all')
