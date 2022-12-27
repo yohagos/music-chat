@@ -16,11 +16,11 @@ def save_song(title: str, artist: str, genre: str, featuring: str, user: str, pa
     db.add(new_song)
     db.commit()
     db.refresh(new_song)
-    create_song(request.uploaded_by, request.path)
+    create_song( request.path)
     new_song_added(user, new_song.id, db)
     return new_song
 
-def create_song(user: str, path: str):
+def create_song(path: str):
     open(path, 'wb+')
 
 def all_songs(db: Session):
