@@ -1,5 +1,6 @@
 import os, shutil
 from decouple import config
+from datetime import datetime
 
 path = config('MUSIC_FOLDER')
 
@@ -17,9 +18,8 @@ def getPath():
     return path
 
 def deleteUserFolder(user: str):
-    print(path)
-    print(user)
     user_path = os.path.join(path, user)
-    print(user_path)
-    print()
     shutil.rmtree(user_path)
+
+def getTimeStamp():
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")

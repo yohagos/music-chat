@@ -7,8 +7,11 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
+    firstname = Column(String)
+    lastname = Column(String)
     username = Column(String)
     password = Column(String)
+    created_at = Column(String)
 
     music = relationship('Music', back_populates='creator')
 
@@ -18,8 +21,10 @@ class Music(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String)
     artist = Column(String)
+    featuring = Column(String)
     genre = Column(String)
     path = Column(String)
+    uploaded_at = Column(String)
     uploaded_by = Column(String, ForeignKey('users.username'))
 
     creator = relationship('User', back_populates='music')

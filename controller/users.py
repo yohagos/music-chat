@@ -5,14 +5,14 @@ from schemas.users import UserBase
 from schemas.models import User as UserModel, Music as MusicModel
 from hashing.hash import get_password_hashed
 from utitlities.logged_in import get_user
-from utitlities.util import deleteUserFolder
+from utitlities.util import deleteUserFolder, getTimeStamp
 
 def create_user(request: UserBase, db: Session):
     user = db.query(UserModel).filter(UserModel.username == request.username).first()
     if user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                 detail=f'User with username {request.username} already exists')
-    new_user = UserModel(username=request.username, password=get_password_hashed(request.password))
+    new_user = UserModel(firstname=request.firstname, lastname=request.lastname, username=request.username, password=get_password_hashed(request.password), created_at=getTimeStamp())
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
