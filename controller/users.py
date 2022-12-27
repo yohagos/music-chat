@@ -5,14 +5,14 @@ from schemas.users import UserBase
 from schemas.models import User as UserModel, Music as MusicModel
 from hashing.hash import get_password_hashed
 from utitlities.logged_in import get_user
-from utitlities.util import deleteUserFolder, getTimeStamp
+from utitlities.util import deleteUserFolder, getTimeStamp, create_file
 
 def create_user(request: UserBase, db: Session):
     user = db.query(UserModel).filter(UserModel.username == request.username).first()
     if user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                 detail=f'User with username {request.username} already exists')
-    new_user = UserModel(firstname=request.firstname, lastname=request.lastname, username=request.username, password=get_password_hashed(request.password), created_at=getTimeStamp())
+    new_user = UserModel(firstname=request.firstname, lastname=request.lastname, username=request.username, password=get_password_hashed(request.password), profile_photo="", created_at=getTimeStamp())
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
@@ -27,6 +27,12 @@ def get_user_by_id(id: int, db: Session):
 def all_users(db: Session):
     return db.query(UserModel).all()
 
+def upload_photo(user: str, file_path: str, db: Session):
+    user = db.query(UserModel).filter(UserModel.username == user).update({"profile_photo": file_path}, synchronize_session="evaluate")
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'User {user} not found')
+    return 'done'
+    
 def remove_user(db: Session):
     user = get_user()
     db.query(UserModel).filter(UserModel.username == user).delete(synchronize_session="evaluate")

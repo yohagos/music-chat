@@ -9,8 +9,7 @@ from controller.music import \
     save_song, all_songs, all_songs_by_user, delete_song
 from database.db import get_db
 from authentication.oauth2 import get_current_user
-from utitlities.logged_in import get_user
-from utitlities.util import getPath, createUserFolderForMusic
+from utitlities.util import create_file, createFoldersAndFilePaths
 
 router = APIRouter(
     prefix='/music',
@@ -21,9 +20,8 @@ router = APIRouter(
 async def add_new_song( new_title: str = Form(...), new_artist: str = Form(...), new_genre: str = Form(...), new_featuring: str = Form(None),
                         file: UploadFile = File(...), db: Session = Depends(get_db), 
                         current_user: UserBase = Depends(get_current_user)):
-    user = get_user()
-    createUserFolderForMusic(user)
-    dest_path = os.path.join(getPath(), user, file.filename)
+    user, dest_path = createFoldersAndFilePaths(file.filename) 
+    await create_file(dest_path, file)
     return save_song(new_title, new_artist, new_genre, new_featuring, user, dest_path, db)
 
 @router.get('/all', response_model=List[ShowMusic])

@@ -1,6 +1,9 @@
 import os, shutil
 from decouple import config
 from datetime import datetime
+from fastapi import UploadFile
+
+from .logged_in import get_user
 
 path = config('MUSIC_FOLDER')
 
@@ -23,3 +26,13 @@ def deleteUserFolder(user: str):
 
 def getTimeStamp():
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+def createFoldersAndFilePaths(filename: str):
+    user = get_user()
+    createUserFolderForMusic(user)
+    return user, os.path.join(getPath(), user, filename)
+
+async def create_file(path: str, file: UploadFile):
+    f = open(path, 'wb')
+    content = await file.read()
+    f.write(content)

@@ -1,12 +1,20 @@
 from pydantic import BaseModel
 from typing import Optional
+from datetime import date
 
 class UserBase(BaseModel):
     firstname: str
     lastname: str
     username: str
     password: str
+
+class UserFull(BaseModel):
+    firstname: str
+    lastname: str
+    username: str
+    password: str
     profile_photo: str
+    created_at: date
 
 class ShowUser(UserBase):
     class Config():

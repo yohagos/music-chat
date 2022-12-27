@@ -12,6 +12,7 @@ class User(Base):
     lastname = Column(String)
     username = Column(String)
     password = Column(String)
+    profile_photo = Column(String)
     created_at = Column(String)
 
     music = relationship('Music', back_populates='creator')
@@ -26,7 +27,6 @@ class Music(Base):
     featuring = Column(String)
     genre = Column(String)
     path = Column(String)
-    profile_photo = Column(String)
     uploaded_at = Column(String)
     uploaded_by = Column(String, ForeignKey('users.username'))
 
@@ -50,4 +50,3 @@ class Messages(Base):
     send_date = Column(Date)
 
     sender = Column(String, ForeignKey('users.username'))
-    creator = relationship('User', back_populates="messages")
