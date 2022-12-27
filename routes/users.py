@@ -26,9 +26,10 @@ def create_new_user(request: UserBase, db: Session = Depends(get_db)):
 
 @router.delete('/delete')
 def delete_account(db: Session = Depends(get_db),current_user: UserBase = Depends(get_current_user)):
-    result = remove_user(db)
-    return result
+    remove_user(db)
+    return 'done'
 
 @router.delete('/delete/all')
 def delete_account_and_songs(db: Session = Depends(get_db),current_user: UserBase = Depends(get_current_user)):
-    return remove_all(db)
+    remove_all(db)
+    return 'done'

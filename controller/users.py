@@ -31,7 +31,6 @@ def remove_user(db: Session):
     user = get_user()
     db.query(UserModel).filter(UserModel.username == user).delete(synchronize_session="evaluate")
     db.commit()
-    return user
     
 def remove_all(db: Session):
     user = get_user()
