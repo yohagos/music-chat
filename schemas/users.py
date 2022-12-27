@@ -6,6 +6,7 @@ class UserBase(BaseModel):
     lastname: str
     username: str
     password: str
+    profile_photo: str
 
 class ShowUser(UserBase):
     class Config():
