@@ -4,6 +4,7 @@ from typing import Optional
 class MusicBase(BaseModel):
     artist: str
     title: str
+    featuring: str
     genre: str
     path: str
     uploaded_by: str
@@ -11,6 +12,7 @@ class MusicBase(BaseModel):
 class MusicList(BaseModel):
     artist: str
     title: str
+    featuring: str
     genre: str
     uploaded_by: str
     
@@ -20,6 +22,7 @@ class Music(MusicBase):
 
 class MusicUpload(BaseModel):
     artist: str
+    featuring: str
     title: str
     genre: str
 
