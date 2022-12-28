@@ -10,7 +10,7 @@ class User(Base):
 
     firstname = Column(String)
     lastname = Column(String)
-    username = Column(String)
+    username = Column(String, unique=True)
     password = Column(String)
     profile_photo = Column(String)
     created_at = Column(String)
@@ -48,5 +48,21 @@ class Messages(Base):
     receiver = Column(String)
     text = Column(String)
     send_date = Column(Date)
+    sender = Column(String)
 
-    sender = Column(String, ForeignKey('users.username'))
+    group_id = Column(Integer, ForeignKey('conversationGroup.con_id'))
+
+class MessageGroup(Base):
+    __tablename__ = "conversationGroup"
+
+    con_id = Column(Integer, primary_key=True, index=True)
+    con_name = Column(String)
+    created_at = Column(Date)
+
+class GroupMember(Base):
+    __tablename__ = "groupMember"
+
+    user_id = Column(Integer, ForeignKey('users.id'), primary_key=True)
+    group_id = Column(Integer, ForeignKey('conversationGroup.con_id'), primary_key=True)
+    joined_time = Column(Date)
+    left_time = Column(Date)
