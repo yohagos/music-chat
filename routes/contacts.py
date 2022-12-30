@@ -17,6 +17,10 @@ router = APIRouter(
 def accept_contact(request: ContactRequestBase, db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
     pass
 
+@router.post('/accepts')
+def create_request(request: ContactRequestBase, db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
+    pass
+
 @router.get('/req_list', response_model=List[ShowContactRequest])
 def request_list(db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
     return get_request_list(db)
