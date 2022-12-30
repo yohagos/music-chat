@@ -21,7 +21,5 @@ def get_messages(db: Session = Depends(get_db), current_user: UserBase = Depends
 
 @router.post('')
 def post_message(request: MessagesBase, db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
-    print(request)
-
     return create_message(request, db)
     

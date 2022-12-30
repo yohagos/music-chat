@@ -1,6 +1,5 @@
 from pydantic import BaseModel
 from typing import Optional
-from datetime import date
 
 class UserBase(BaseModel):
     firstname: str
@@ -14,7 +13,7 @@ class UserFull(BaseModel):
     username: str
     password: str
     profile_photo: str
-    created_at: date
+    created_at: str
 
 class ShowUser(UserBase):
     class Config():

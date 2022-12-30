@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Date
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 
 from database.db import Base
@@ -47,7 +47,7 @@ class Messages(Base):
     
     receiver = Column(String)
     text = Column(String)
-    send_date = Column(Date)
+    send_date = Column(String)
     sender = Column(String)
 
     group_id = Column(Integer, ForeignKey('conversationGroup.con_id'))
@@ -57,12 +57,27 @@ class MessageGroup(Base):
 
     con_id = Column(Integer, primary_key=True, index=True)
     con_name = Column(String)
-    created_at = Column(Date)
+    created_at = Column(String)
 
 class GroupMember(Base):
     __tablename__ = "groupMember"
 
     user_id = Column(Integer, ForeignKey('users.id'), primary_key=True)
     group_id = Column(Integer, ForeignKey('conversationGroup.con_id'), primary_key=True)
-    joined_time = Column(Date)
-    left_time = Column(Date)
+    joined_time = Column(String)
+    left_time = Column(String)
+
+class Contacts(Base):
+    __tablename__ = "contacts"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user = Column(String, ForeignKey('users.username'))
+    contact = Column(String)
+
+class ContactRequests(Base):
+    __tablename__ = "contactRequests"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user = Column(String, ForeignKey('users.username'))
+    requested = Column(String, ForeignKey('users.username'))
+    accepted = Column(Boolean, default=False)

@@ -25,8 +25,8 @@ class ShowMessageGroup(MessageGroupBase):
 # Group Member
 
 class GroupMemberBase(BaseModel):
-    joined_time: datetime
-    left_time: datetime
+    joined_time: str
+    left_time: str
 
 class ShowGroupMember(GroupMemberBase):
     class Config():
