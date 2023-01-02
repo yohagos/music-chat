@@ -71,13 +71,16 @@ class Contacts(Base):
     __tablename__ = "contacts"
 
     id = Column(Integer, primary_key=True, index=True)
+
     user = Column(String, ForeignKey('users.username'))
     contact = Column(String)
+    since = Column(String)
 
 class ContactRequests(Base):
     __tablename__ = "contactRequests"
 
     id = Column(Integer, primary_key=True, index=True)
+    
     user = Column(String, ForeignKey('users.username'))
     requested = Column(String, ForeignKey('users.username'))
-    accepted = Column(Boolean, default=False)
+

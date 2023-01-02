@@ -11,7 +11,6 @@ class ShowContacts(ContactsBase):
 class ContactRequestBase(BaseModel):
     user: str
     requested: str
-    accepted: bool
 
 class ShowContactRequest(ContactRequestBase):    
     class Config():

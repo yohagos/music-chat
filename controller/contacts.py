@@ -1,40 +1,47 @@
 from fastapi import status, HTTPException
 from sqlalchemy.orm import Session
 
-from schemas.models import ContactRequests as ContactRequestModel, User as UserModel
+from schemas.contacts import ContactRequestBase
+from schemas.models import ContactRequests as ContactRequestModel, Contacts as ContactsModel, User as UserModel
 from utitlities.logged_in import get_user
 from utitlities.util import getTimeStamp
 
-def accept_contact_request(request: ContactRequestModel, db: Session):
-    pass
+def accept_contact_request(id: int, db: Session):
+    con: ContactRequestModel = db.query(ContactRequestModel).filter(ContactRequestModel.id == id).first()
+    new_con: ContactsModel = ContactsModel(user = con.user, contact = con.requested, since = getTimeStamp())
+    
+    db.delete(con)
+    db.commit()
 
-def create_new_requests(request: ContactRequestModel, db: Session):
+    db.add(new_con)
+    db.commit()
+    db.refresh(new_con)
+    return 'Accepted contact request'
+    
+
+def create_new_contact_request(request: ContactRequestBase, db: Session):
     user = get_user()
     sender = db.query(UserModel).filter(UserModel.username == user).first()
     if request.user is request.requested:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=f'User {request.user} cannot request Contact to themself')
     elif sender is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'User {user} not found')
-    # how to create sqlalchemy query with join?
-# q = Session.query(
-#          User, Document, DocumentPermissions,
-#     ).filter(
-#          User.email == Document.author,
-#     ).filter(
-#          Document.name == DocumentPermissions.document,
-#     ).filter(
-#         User.email == 'someemail',
-#     ).all()
-
-    # Check request infos!
-    print(request)
-    db.add(request)
+    new_con: ContactRequestModel = ContactRequestModel(user=user, requested=request.requested)
+    print(new_con)
+    db.add(new_con)
     db.commit()
-    db.refresh(request)
-    pass
+    db.refresh(new_con)
+    return 'Created new contact request'
 
 def get_request_list(db: Session):
-    return db.query(ContactRequestModel).all()
+    user = get_user()
+    return db.query(ContactRequestModel).filter(ContactRequestModel.user == user).all()
+
+def get_contact_list(db: Session):
+    user = get_user()
+    return db.query(ContactsModel).filter(ContactsModel.user == user).all()
 
 def decline_contact_request(id: int, db: Session):
-    pass
+    db.query(ContactRequestModel).filter(ContactRequestModel.id == id).delete()
+    db.commit()
+    return f'Deleted contact request with ID {id}'
