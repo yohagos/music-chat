@@ -27,4 +27,8 @@ app.include_router(music.router)
 app.include_router(messages.router)
 app.include_router(contacts.router)
 
+#app.docs_url='/docs'
+app.root_path='/api'
+app.openapi_url='/docs'
+
 Base.metadata.create_all(engine)
