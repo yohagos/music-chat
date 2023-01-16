@@ -1,4 +1,5 @@
 fastapi
+fastapi_jwt_auth
 uvicorn
 sqlalchemy
 bcrypt

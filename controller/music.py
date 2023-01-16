@@ -19,12 +19,8 @@ def save_song(title: str, artist: str, genre: str, featuring: str, user: str, pa
     new_song_added(user, new_song.id, db)
     return new_song
 
-
-
 def all_songs(db: Session):
-    songs = db.query(MusicModel).all()
-    print(songs)
-    return songs
+    return db.query(MusicModel).all()
 
 def all_songs_by_user(user: str, db: Session):
     return db.query(MusicModel).filter(MusicModel.uploaded_by == user).all()

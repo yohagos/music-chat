@@ -27,7 +27,6 @@ def create_new_contact_request(request: ContactRequestBase, db: Session):
     elif sender is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'User {user} not found')
     new_con: ContactRequestModel = ContactRequestModel(user=user, requested=request.requested)
-    print(new_con)
     db.add(new_con)
     db.commit()
     db.refresh(new_con)
