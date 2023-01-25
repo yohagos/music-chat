@@ -12,6 +12,7 @@ Expire = 60
 
 def create_access_token(data: dict, expire_delta: Union[timedelta, None] = None):
     to_encode = data.copy()
+    print(to_encode)
     if expire_delta:
         expire = datetime.utcnow() + expire_delta
     else: 
@@ -36,3 +37,11 @@ def get_email_from_token(token: str):
         return payload.get('sub')
     except:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
+def delete_token(token: str):
+    try:
+        payload = jwt.decode(token, SECRET, algorithms=[ALGORITHM])
+        payload.setdefault()
+        print('Payload', payload)
+    except:
+        print('didnt work')
