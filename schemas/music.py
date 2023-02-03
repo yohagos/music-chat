@@ -4,28 +4,33 @@ from typing import Optional
 class MusicBase(BaseModel):
     artist: str
     title: str
-    featuring: str
+    feature: str
     genre: str
     path: str
     uploaded_by: str
 
-class MusicList(BaseModel):
+class MusicUpload(BaseModel):
     artist: str
     title: str
-    featuring: str
+    feature: str
     genre: str
     uploaded_by: str
+
+class MusicInfo(BaseModel):
+    artist: str
+    title: str
+    feature: str
+    genre: str
+
+class MusicFile(BaseModel):
+    artist: str
+    title: str
+    filepath: str
     
 class Music(MusicBase):
     class Config():
         orm_mode = True
 
-class MusicUpload(BaseModel):
-    artist: str
-    featuring: str
-    title: str
-    genre: str
-
-class ShowMusic(MusicList):
+class ShowMusic(MusicUpload):
     class Config():
         orm_mode = True

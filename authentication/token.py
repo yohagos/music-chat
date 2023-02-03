@@ -8,7 +8,7 @@ from schemas.users import TokenData
 
 SECRET = config('SECRET')
 ALGORITHM = config('ALGORITHM')
-Expire = 60
+Expire = 600
 
 def create_access_token(data: dict, expire_delta: Union[timedelta, None] = None):
     to_encode = data.copy()

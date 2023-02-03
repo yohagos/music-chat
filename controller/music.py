@@ -2,13 +2,15 @@ from fastapi import status, HTTPException
 from sqlalchemy.orm import Session
 
 from schemas.models import Music as MusicModel
+from schemas.music import MusicBase
 from controller.history import new_song_added
 from utitlities.logged_in import get_user
 from utitlities.util import getTimeStamp
 
-def save_song(title: str, artist: str, genre: str, featuring: str, user: str, path: str, db: Session):
+def save_song(request: MusicBase, db: Session):
+    user = get_user()
     if featuring is None: featuring=""
-    request: MusicModel = MusicModel( title=title, genre=genre, path=path, uploaded_by=user, artist=artist, featuring=featuring, uploaded_at=getTimeStamp())
+    request: MusicModel = MusicModel( title=request.title, genre=request.genre, uploaded_by=user, artist=request.artist, featuring=featuring, uploaded_at=getTimeStamp())
     song = db.query(MusicModel).filter(MusicModel.artist == request.artist , MusicModel.title == request.title, MusicModel.uploaded_by == user).first()
     if song:
         raise HTTPException(status_code=status.HTTP_405_METHOD_NOT_ALLOWED, detail=f'Song {request.title} and Artist {request.artist} already exists')

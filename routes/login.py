@@ -4,7 +4,6 @@ from sqlalchemy.orm import Session
 
 from database.db import get_db
 from schemas.models import User
-from schemas.users import Login
 from hashing.hash import verify_password
 from authentication.token import create_access_token
 
