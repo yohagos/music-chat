@@ -22,10 +22,6 @@ class MusicInfo(BaseModel):
     feature: str
     genre: str
 
-class MusicFile(BaseModel):
-    artist: str
-    title: str
-    filepath: str
     
 class Music(MusicBase):
     class Config():

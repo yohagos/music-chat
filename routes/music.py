@@ -21,10 +21,21 @@ async def add_new_info( request: MusicInfo, db: Session = Depends(get_db), curre
     return save_song(request, db)
 
 @router.post('/add_song')
-async def add_new_song( file: UploadFile = File(...), current_user: UserBase = Depends(get_current_user)):
-    _, dest_path = createFoldersAndFilePaths(file.filename) 
-    await create_file(dest_path, file)
-    return f'Received {file.filename}'
+async def add_new_song(new_song: UploadFile, current_user: UserBase = Depends(get_current_user)):
+    #_, dest_path = createFoldersAndFilePaths(file.filename) 
+    #await create_file(dest_path, file)
+    #return f'Received {file.filename}'
+    """ try:
+        contents = new_song.file.read()
+        with open(new_song.filename, 'wb') as f:
+            f.write(contents)
+    except Exception:
+        return {"message": "There was an error uploading the file"}
+    finally:
+        new_song.file.close()
+
+    return {"message": f"Successfully uploaded {new_song.filename}"} """
+    return {f'received file: {new_song}'}
 
 @router.post('/form')
 def form_data(username: str = Form(), password: str = Form()):
