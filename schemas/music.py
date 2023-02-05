@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, FileUrl
 from typing import Optional
 
 class MusicBase(BaseModel):
@@ -30,3 +30,6 @@ class Music(MusicBase):
 class ShowMusic(MusicUpload):
     class Config():
         orm_mode = True
+
+class MusicFile(BaseModel):
+    file: FileUrl

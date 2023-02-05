@@ -1,9 +1,9 @@
-from fastapi import APIRouter, Depends, UploadFile, File, Form
+from fastapi import APIRouter, Depends, status, UploadFile, File, Form, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 
 from schemas.users import UserBase
-from schemas.music import ShowMusic, MusicInfo
+from schemas.music import ShowMusic, MusicInfo, MusicFile
 from controller.music import \
     save_song, all_songs, all_songs_by_user, delete_song
 from database.db import get_db
@@ -20,28 +20,14 @@ async def add_new_info( request: MusicInfo, db: Session = Depends(get_db), curre
     print(request)
     return save_song(request, db)
 
-@router.post('/add_song')
-async def add_new_song(new_song: UploadFile, current_user: UserBase = Depends(get_current_user)):
-    #_, dest_path = createFoldersAndFilePaths(file.filename) 
-    #await create_file(dest_path, file)
-    #return f'Received {file.filename}'
-    """ try:
-        contents = new_song.file.read()
-        with open(new_song.filename, 'wb') as f:
-            f.write(contents)
-    except Exception:
-        return {"message": "There was an error uploading the file"}
-    finally:
-        new_song.file.close()
+# How to upload file in fastapi? 
+@router.post("/addSong")
+async def post_endpoint(file: UploadFile = File(), current_user: UserBase = Depends(get_current_user)):
+    _, dest_path = createFoldersAndFilePaths(file.filename) 
+    await create_file(dest_path, file)
+    return f'Received {file.filename}'
+    #return {'file size: ', len(file)}
 
-    return {"message": f"Successfully uploaded {new_song.filename}"} """
-    return {f'received file: {new_song}'}
-
-@router.post('/form')
-def form_data(username: str = Form(), password: str = Form()):
-    print(username)
-    print(password)
-    return {'done'}
 
 @router.get('/all', response_model=List[ShowMusic])
 def get_all_songs(db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
