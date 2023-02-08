@@ -26,7 +26,7 @@ def create_new_user(request: UserBase, db: Session = Depends(get_db)):
     return create_user(request, db)
 
 @router.post('/upload_photo')
-async def post_uploaad_photo(file: UploadFile = File(...), db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
+async def post_uploaad_photo(file: UploadFile = File(), db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
     user, dest_path = createFoldersAndFilePaths(file.filename)
     await create_file(dest_path, file)
     return upload_photo(user, dest_path, db)
