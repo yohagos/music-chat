@@ -1,4 +1,5 @@
 from fastapi import status, HTTPException
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session, object_mapper, exc
 
 from schemas.users import UserBase
@@ -31,7 +32,15 @@ def upload_photo(user: str, file_path: str, db: Session):
     user = db.query(UserModel).filter(UserModel.username == user).update({"profile_photo": file_path}, synchronize_session="evaluate")
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'User {user} not found')
-    return 'done'
+    db.commit()
+    return 'Done'
+
+async def get_profile_photo(db: Session):
+    user = db.query(UserModel).filter(UserModel.username == get_user()).first()
+    if not user.profile_photo: 
+        return ''
+    #fname = user.profile_photo.split('\\')
+    return user.profile_photo #FileResponse(path=user.profile_photo, filename=fname[len(fname)-1], media_type='image/jpg')
     
 def remove_user(db: Session):
     user = get_user()

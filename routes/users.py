@@ -1,11 +1,12 @@
 from fastapi import APIRouter, Depends, UploadFile, File
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 from typing import List
 
-from schemas.users import UserBase, ShowUser
+from schemas.users import UserBase, ShowUser, ShowFullUser
 from authentication.oauth2 import get_current_user
 from database.db import get_db
-from controller.users import get_user_by_id, all_users, create_user, upload_photo, remove_user, remove_all
+from controller.users import get_user_by_id, all_users, create_user, upload_photo, get_profile_photo, remove_user, remove_all
 from utitlities.util import create_file, createFoldersAndFilePaths
 
 router = APIRouter(
@@ -17,7 +18,7 @@ router = APIRouter(
 def get_user(id: int, db: Session = Depends(get_db)):
     return get_user_by_id(id, db)
 
-@router.get('s', response_model=List[ShowUser])
+@router.get('s', response_model=List[ShowFullUser])
 def get_all_users(db: Session = Depends(get_db)):
     return all_users(db)
 
@@ -30,6 +31,11 @@ async def post_uploaad_photo(file: UploadFile = File(), db: Session = Depends(ge
     user, dest_path = createFoldersAndFilePaths(file.filename)
     await create_file(dest_path, file)
     return upload_photo(user, dest_path, db)
+
+@router.get('/profile_photo', response_class=FileResponse)
+async def user_photo(db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
+    file = get_profile_photo(db)
+    return file
 
 @router.delete('/delete')
 def delete_account(db: Session = Depends(get_db),current_user: UserBase = Depends(get_current_user)):

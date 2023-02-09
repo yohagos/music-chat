@@ -4,7 +4,7 @@ from typing import Optional
 class MusicBase(BaseModel):
     artist: str
     title: str
-    feature: str
+    featuring: str
     genre: str
     path: str
     uploaded_by: str
@@ -12,7 +12,7 @@ class MusicBase(BaseModel):
 class MusicUpload(BaseModel):
     artist: str
     title: str
-    feature: str
+    featuring: str
     genre: str
     uploaded_by: str
 
