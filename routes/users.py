@@ -40,11 +40,6 @@ def user_photo(db: Session = Depends(get_db), current_user: UserBase = Depends(g
         return FileResponse(path=file, media_type='image/jpeg')
     return {'error': 'file does not exists'}
 
-""" @router.post('/photo', response_class=FileResponse)
-async def photo(db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
-    file = await get_profile_photo(db)
-    return file """
-
 @router.delete('/delete')
 def delete_account(db: Session = Depends(get_db),current_user: UserBase = Depends(get_current_user)):
     remove_user(db)
