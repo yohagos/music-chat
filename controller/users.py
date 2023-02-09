@@ -35,7 +35,7 @@ def upload_photo(user: str, file_path: str, db: Session):
     db.commit()
     return 'Done'
 
-async def get_profile_photo(db: Session):
+def get_profile_photo(db: Session):
     user = db.query(UserModel).filter(UserModel.username == get_user()).first()
     if not user.profile_photo: 
         return ''

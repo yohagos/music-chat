@@ -1,7 +1,8 @@
-from fastapi import APIRouter, Depends, UploadFile, File
+from fastapi import APIRouter, Depends, UploadFile, File, Header
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 from typing import List
+import os
 
 from schemas.users import UserBase, ShowUser, ShowFullUser
 from authentication.oauth2 import get_current_user
@@ -32,10 +33,17 @@ async def post_uploaad_photo(file: UploadFile = File(), db: Session = Depends(ge
     await create_file(dest_path, file)
     return upload_photo(user, dest_path, db)
 
-@router.get('/profile_photo', response_class=FileResponse)
-async def user_photo(db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
+@router.get('/photo')
+def user_photo(db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
     file = get_profile_photo(db)
-    return file
+    if os.path.exists(file):
+        return FileResponse(path=file, media_type='image/jpeg')
+    return {'error': 'file does not exists'}
+
+""" @router.post('/photo', response_class=FileResponse)
+async def photo(db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
+    file = await get_profile_photo(db)
+    return file """
 
 @router.delete('/delete')
 def delete_account(db: Session = Depends(get_db),current_user: UserBase = Depends(get_current_user)):
