@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends, UploadFile, File, Form
 from sqlalchemy.orm import Session
 from typing import List
-import os
 
 from schemas.users import UserBase
 from schemas.music import ShowMusic
@@ -10,6 +9,7 @@ from controller.music import \
 from database.db import get_db
 from authentication.oauth2 import get_current_user
 from utitlities.util import create_file, createFoldersAndFilePaths
+from utitlities.logged_in import get_user
 
 router = APIRouter(
     prefix='/music',
@@ -17,12 +17,10 @@ router = APIRouter(
 )
 
 @router.post('/add_song')
-async def add_new_song( new_title: str = Form(...), new_artist: str = Form(...), new_genre: str = Form(...), new_featuring: str = Form(None),
-                        file: UploadFile = File(...), db: Session = Depends(get_db), 
-                        current_user: UserBase = Depends(get_current_user)):
-    user, dest_path = createFoldersAndFilePaths(file.filename) 
+async def new_song(artist: str = Form(), title: str = Form(), genre: str = Form(), featuring: str = Form(), file: UploadFile = File(), db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
+    _, dest_path = createFoldersAndFilePaths(file.filename)
     await create_file(dest_path, file)
-    return save_song(new_title, new_artist, new_genre, new_featuring, user, dest_path, db)
+    return save_song(artist=artist, title=title, genre=genre, featuring=featuring, path=dest_path, db=db)
 
 @router.get('/all', response_model=List[ShowMusic])
 def get_all_songs(db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
