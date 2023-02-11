@@ -33,14 +33,15 @@ def upload_photo(user: str, file_path: str, db: Session):
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'User {user} not found')
     db.commit()
-    return 'Done'
+    return user
 
 def get_profile_photo(db: Session):
-    user = db.query(UserModel).filter(UserModel.username == get_user()).first()
+    username = get_user()
+    user = db.query(UserModel).filter(UserModel.username == username).first()
     if not user.profile_photo: 
-        return ''
-    #fname = user.profile_photo.split('\\')
-    return user.profile_photo #FileResponse(path=user.profile_photo, filename=fname[len(fname)-1], media_type='image/jpg')
+        raise HTTPException(status_code=status.HTTP_424_FAILED_DEPENDENCY)
+    fname = user.profile_photo.split('\\')
+    return FileResponse(path=user.profile_photo, filename=fname[len(fname)-1], media_type='image/jpg')
     
 def remove_user(db: Session):
     user = get_user()

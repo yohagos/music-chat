@@ -23,6 +23,13 @@ def get_user(id: int, db: Session = Depends(get_db)):
 def get_all_users(db: Session = Depends(get_db)):
     return all_users(db)
 
+@router.get('/photo')
+async def user_photo(db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
+    file = get_profile_photo(db)
+    if os.path.exists(file.path):
+        return FileResponse(path=file.path)
+    return {'error': 'file does not exists'}
+
 @router.post('', response_model=ShowUser)
 def create_new_user(request: UserBase, db: Session = Depends(get_db)):
     return create_user(request, db)
@@ -32,13 +39,6 @@ async def post_uploaad_photo(file: UploadFile = File(), db: Session = Depends(ge
     user, dest_path = createFoldersAndFilePaths(file.filename)
     await create_file(dest_path, file)
     return upload_photo(user, dest_path, db)
-
-@router.get('/photo')
-def user_photo(db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
-    file = get_profile_photo(db)
-    if os.path.exists(file):
-        return FileResponse(path=file, media_type='image/jpeg')
-    return {'error': 'file does not exists'}
 
 @router.delete('/delete')
 def delete_account(db: Session = Depends(get_db),current_user: UserBase = Depends(get_current_user)):
