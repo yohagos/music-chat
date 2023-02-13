@@ -7,7 +7,7 @@ import os
 from schemas.users import UserBase, ShowUser, ShowFullUser
 from authentication.oauth2 import get_current_user
 from database.db import get_db
-from controller.users import get_user_by_id, all_users, create_user, upload_photo, get_profile_photo, remove_user, remove_all
+from controller.users import get_user_info, all_users, create_user, upload_photo, get_profile_photo, remove_user, remove_all
 from utitlities.util import create_file, createFoldersAndFilePaths
 
 router = APIRouter(
@@ -16,8 +16,8 @@ router = APIRouter(
 )
 
 @router.get('', response_model=ShowUser)
-def get_user(id: int, db: Session = Depends(get_db)):
-    return get_user_by_id(id, db)
+def get_user(db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
+    return get_user_info( db)
 
 @router.get('s', response_model=List[ShowFullUser])
 def get_all_users(db: Session = Depends(get_db)):
