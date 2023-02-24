@@ -8,6 +8,7 @@ class MusicBase(BaseModel):
     genre: str
     path: str
     uploaded_by: str
+    id: int
 
 class MusicUpload(BaseModel):
     artist: str
