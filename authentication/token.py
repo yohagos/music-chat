@@ -8,14 +8,14 @@ from schemas.users import TokenData
 
 SECRET = config('SECRET')
 ALGORITHM = config('ALGORITHM')
-Expire = 600
+Expire = 50
 
 def create_access_token(data: dict, expire_delta: Union[timedelta, None] = None):
     to_encode = data.copy()
     if expire_delta:
         expire = datetime.utcnow() + expire_delta
     else: 
-        expire = datetime.utcnow() + timedelta(minutes=15)
+        expire = datetime.utcnow() + timedelta(minutes=30)
     to_encode.update({'exp': expire})
     encoded_jwt = jwt.encode(to_encode, SECRET, algorithm=ALGORITHM)
     return encoded_jwt
