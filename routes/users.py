@@ -20,7 +20,7 @@ def get_user(db: Session = Depends(get_db), current_user: UserBase = Depends(get
     return get_user_info( db)
 
 @router.get('s', response_model=List[ShowFullUser])
-def get_all_users(db: Session = Depends(get_db)):
+def get_all_users(db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
     return all_users(db)
 
 @router.get('/photo')

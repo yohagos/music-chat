@@ -8,6 +8,7 @@ class UserBase(BaseModel):
     password: str
 
 class UserFull(BaseModel):
+    id: int
     firstname: str
     lastname: str
     username: str

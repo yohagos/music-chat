@@ -7,7 +7,8 @@ from utitlities.logged_in import get_user
 from utitlities.util import getTimeStamp
 
 def accept_contact_request(id: int, db: Session):
-    con: ContactRequestModel = db.query(ContactRequestModel).filter(ContactRequestModel.id == id).first()
+    user = get_user()
+    con: ContactRequestModel = db.query(ContactRequestModel).filter(ContactRequestModel.id == id, ContactRequestModel.user == user).first()
     new_con: ContactsModel = ContactsModel(user = con.user, contact = con.requested, since = getTimeStamp())
     
     db.delete(con)

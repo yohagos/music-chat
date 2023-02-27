@@ -12,6 +12,11 @@ class ContactRequestBase(BaseModel):
     user: str
     requested: str
 
-class ShowContactRequest(ContactRequestBase):    
+class ContactRequestFull(BaseModel):
+    id: int
+    user: str
+    requested: str
+
+class ShowContactRequest(ContactRequestFull):    
     class Config():
         orm_mode = True
