@@ -9,7 +9,6 @@ class ShowContacts(ContactsBase):
         orm_mode = True
 
 class ContactRequestBase(BaseModel):
-    user: str
     requested: str
 
 class ContactRequestFull(BaseModel):

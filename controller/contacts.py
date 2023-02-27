@@ -23,9 +23,7 @@ def accept_contact_request(id: int, db: Session):
 def create_new_contact_request(request: ContactRequestBase, db: Session):
     user = get_user()
     sender = db.query(UserModel).filter(UserModel.username == user).first()
-    if request.user is request.requested:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=f'User {request.user} cannot request Contact to themself')
-    elif sender is None:
+    if sender is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'User {user} not found')
     new_con: ContactRequestModel = ContactRequestModel(user=user, requested=request.requested)
     db.add(new_con)
@@ -35,7 +33,7 @@ def create_new_contact_request(request: ContactRequestBase, db: Session):
 
 def get_request_list(db: Session):
     user = get_user()
-    return db.query(ContactRequestModel).filter(ContactRequestModel.user == user).all()
+    return db.query(ContactRequestModel).filter(ContactRequestModel.requested == user).all()
 
 def get_contact_list(db: Session):
     user = get_user()
