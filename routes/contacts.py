@@ -7,14 +7,14 @@ from schemas.users import UserBase
 from schemas.contacts import ShowContactRequest, ShowContacts, ContactRequestBase
 from database.db import get_db
 from controller.contacts import accept_contact_request, create_new_contact_request, \
-    get_request_list, get_contact_list, decline_contact_request 
+    get_request_list, get_contact_list, decline_contact_request, remove_current_contact
 
 router = APIRouter(
     prefix='/contacts',
     tags=['Contacts']
 )
 
-@router.post('/accepts')
+@router.post('/accepts/{id}')
 def accept_contact(id: int, db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
     return accept_contact_request(id, db)
 
@@ -30,7 +30,10 @@ def request_list(db: Session = Depends(get_db), current_user: UserBase = Depends
 def contact_list(db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
     return get_contact_list(db)
 
-@router.delete('/{id}')
+@router.delete('/decline/{id}')
 def decline_request(id: int, db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
     return decline_contact_request(id, db)
 
+@router.delete('/delete/{id}')
+def remove_contact(id: int, db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
+    return remove_current_contact(id, db)

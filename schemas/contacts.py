@@ -4,7 +4,12 @@ class ContactsBase(BaseModel):
     user: str
     contact: str
 
-class ShowContacts(ContactsBase):
+class ContactsFull(BaseModel):
+    id: int
+    user: str
+    contact: str
+
+class ShowContacts(ContactsFull):
     class Config():
         orm_mode = True
 
