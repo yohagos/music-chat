@@ -52,3 +52,8 @@ def remove_current_contact(id: int, db: Session):
     db.commit()
     return {'Contact removed': f'ID {id}'}
 
+
+### Contact Informations ###
+
+def get_contact_info(user: str, db: Session):
+    return db.query(UserModel).filter(UserModel.username == user).first()
