@@ -1,12 +1,13 @@
 from fastapi import status, HTTPException
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
-from schemas.messages import MessagesBase
+from schemas.messages import SendMessage
 from schemas.models import Messages as MessageModel, User as UserModel
 from utitlities.logged_in import get_user
 from utitlities.util import getTimeStamp
 
-def create_message(request: MessagesBase, db: Session):
+def create_message(request: SendMessage, db: Session):
     user = get_user()
     receiver = db.query(UserModel).filter(UserModel.username == request.receiver).first()
     if not receiver:
@@ -21,7 +22,11 @@ def create_message(request: MessagesBase, db: Session):
     db.refresh(new_msg)
     return 'added new msg'
 
-def get_user_messages(db: Session):
+def get_user_messages(contact: str, db: Session):
     user = get_user()
-    msg_list = db.query(MessageModel).filter(MessageModel.sender == user).all()
+    msg_list = db.query(MessageModel).filter(or_(MessageModel.sender == user, MessageModel.receiver == contact)).all()
+    receiver_list = db.query(MessageModel).filter(or_(MessageModel.sender == contact, MessageModel.receiver == user)).all()
+    msg_list += receiver_list
     return msg_list
+
+# while using sqlalchemy, how to use or in filter?

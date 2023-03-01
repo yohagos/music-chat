@@ -8,6 +8,11 @@ class MessagesBase(BaseModel):
     sender: str
     receiver: str
     text: str
+    send_date: str
+
+class SendMessage(BaseModel):
+    receiver: str
+    text: str
 
 class ShowMessages(MessagesBase):
     class Config():

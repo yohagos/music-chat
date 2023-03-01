@@ -4,7 +4,6 @@ from typing import List
 
 from database.db import get_db
 from authentication.oauth2 import get_current_user
-from utitlities.logged_in import get_user
 
 from controller.messages import *
 from schemas.users import UserBase
@@ -15,11 +14,11 @@ router = APIRouter(
     tags=['Messages']
 )
 
-@router.get('', response_model=List[ShowMessages])
-def get_messages(db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
-    return get_user_messages(db)
+@router.get('/{contact}', response_model=List[ShowMessages])
+def get_messages(contact: str, db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
+    return get_user_messages(contact, db)
 
 @router.post('')
-def post_message(request: MessagesBase, db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
+def post_message(request: SendMessage, db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
     return create_message(request, db)
     
