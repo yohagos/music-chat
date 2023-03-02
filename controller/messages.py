@@ -29,4 +29,8 @@ def get_user_messages(contact: str, db: Session):
     msg_list += receiver_list
     return msg_list
 
-# while using sqlalchemy, how to use or in filter?
+### WebSocket
+
+async def websocket_data_processing(data: dict):
+    message_processed = data.get('message', "").upper()
+    return message_processed

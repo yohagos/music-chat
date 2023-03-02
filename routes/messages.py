@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -22,3 +22,21 @@ def get_messages(contact: str, db: Session = Depends(get_db), current_user: User
 def post_message(request: SendMessage, db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
     return create_message(request, db)
     
+@router.websocket('/ws')
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+
+    while True:
+        try:
+            data = await websocket.receive_json()
+            message_processed = await websocket_data_processing(data)
+            await websocket.send_json(
+                {
+                "message": message_processed,
+                "time": datetime.now().strftime("%H:%M:%S"),
+                }
+            )
+        except WebSocketDisconnect:
+            print('Connection to Websocket closed')
+            break
+
