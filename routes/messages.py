@@ -23,13 +23,14 @@ def post_message(request: SendMessage, db: Session = Depends(get_db), current_us
     return create_message(request, db)
     
 @router.websocket('/ws')
-async def websocket_endpoint(websocket: WebSocket):
+async def websocket_endpoint(websocket: WebSocket, db: Session = Depends(get_db)):
+    print('connection opened')
     await websocket.accept()
 
     while True:
         try:
             data = await websocket.receive_json()
-            message_processed = await websocket_data_processing(data)
+            message_processed = await websocket_data_processing(data, db)
             await websocket.send_json(
                 {
                     "sender": message_processed.get('sender'),
@@ -41,4 +42,9 @@ async def websocket_endpoint(websocket: WebSocket):
         except WebSocketDisconnect:
             print('Connection to Websocket closed')
             break
+
+@router.get('/ws/load')
+async def load_conversation():
+    pass
+    # load every msg between to users
 

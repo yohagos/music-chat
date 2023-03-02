@@ -31,7 +31,14 @@ def get_user_messages(contact: str, db: Session):
 
 ### WebSocket
 
-async def websocket_data_processing(data: dict):
-    print(data)
-    message_processed = data
-    return message_processed
+async def websocket_data_processing(data: dict, db: Session):
+    msg = MessageModel(
+        receiver=data.get('receiver'),
+        sender=data.get('sender'),
+        text=data.get('text'),
+        send_date=getTimeStamp(),
+    )
+    db.add(msg)
+    db.commit()
+    db.refresh(msg)
+    return data
