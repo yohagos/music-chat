@@ -32,8 +32,10 @@ async def websocket_endpoint(websocket: WebSocket):
             message_processed = await websocket_data_processing(data)
             await websocket.send_json(
                 {
-                "message": message_processed,
-                "time": datetime.now().strftime("%H:%M:%S"),
+                    "sender": message_processed.get('sender'),
+                    "send_time": datetime.now().strftime("%H:%M:%S"),
+                    "receiver": message_processed.get('receiver'),
+                    "text": message_processed.get('text')
                 }
             )
         except WebSocketDisconnect:
