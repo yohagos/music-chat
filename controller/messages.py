@@ -22,13 +22,6 @@ def create_message(request: SendMessage, db: Session):
     db.refresh(new_msg)
     return 'added new msg'
 
-def get_user_messages(contact: str, db: Session):
-    user = get_user()
-    msg_list = db.query(MessageModel).filter(or_(MessageModel.sender == user, MessageModel.receiver == contact)).all()
-    receiver_list = db.query(MessageModel).filter(or_(MessageModel.sender == contact, MessageModel.receiver == user)).all()
-    msg_list += receiver_list
-    return msg_list
-
 ### WebSocket
 
 async def websocket_data_processing(data: dict, db: Session):
@@ -43,8 +36,9 @@ async def websocket_data_processing(data: dict, db: Session):
     db.refresh(msg)
     return data
 
-async def load_messages(request: LoadMessageFor, db: Session):
-    receiver_list = db.query(MessageModel).filter(or_(MessageModel.sender == request.sender, MessageModel.receiver == request.receiver)).all()
-    sender_list = db.query(MessageModel).filter(or_(MessageModel.receiver == request.sender, MessageModel.receiver == request.sender)).all()
+async def load_messages(receiver: str, db: Session):
+    user = get_user()
+    receiver_list = db.query(MessageModel).filter(or_(MessageModel.sender == user, MessageModel.receiver == receiver)).all()
+    sender_list = db.query(MessageModel).filter(or_(MessageModel.receiver == user, MessageModel.sender == receiver)).all()
     receiver_list += sender_list
     return receiver_list

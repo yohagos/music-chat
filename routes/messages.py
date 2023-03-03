@@ -1,14 +1,15 @@
+from datetime import datetime
 from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect
 from sqlalchemy.orm import Session
 from typing import List
-import datetime
+
 
 from database.db import get_db
 from authentication.oauth2 import get_current_user
 
-from controller.messages import load_messages, get_user_messages, create_message, websocket_data_processing
+from controller.messages import load_messages, create_message, websocket_data_processing
 from schemas.users import UserBase
-from schemas.messages import LoadMessageFor, ShowMessages, SendMessage
+from schemas.messages import ShowMessages, SendMessage
 
 router = APIRouter(
     prefix='/msg',
@@ -16,8 +17,8 @@ router = APIRouter(
 )
 
 @router.get('/{contact}', response_model=List[ShowMessages])
-def get_messages(contact: str, db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
-    return get_user_messages(contact, db)
+async def get_messages(contact: str, db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
+    return await load_messages(contact, db)
 
 @router.post('')
 def post_message(request: SendMessage, db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
@@ -44,6 +45,3 @@ async def websocket_endpoint(websocket: WebSocket, db: Session = Depends(get_db)
             print('Connection to Websocket closed')
             break
 
-@router.get('/ws/load')
-async def load_conversation(request: LoadMessageFor, db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
-    return load_messages(request, db)
