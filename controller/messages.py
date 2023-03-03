@@ -38,7 +38,7 @@ async def websocket_data_processing(data: dict, db: Session):
 
 async def load_messages(receiver: str, db: Session):
     user = get_user()
-    receiver_list = db.query(MessageModel).filter(or_(MessageModel.sender == user, MessageModel.receiver == receiver)).all()
-    sender_list = db.query(MessageModel).filter(or_(MessageModel.receiver == user, MessageModel.sender == receiver)).all()
+    receiver_list = db.query(MessageModel).filter(MessageModel.sender == user, MessageModel.receiver == receiver).all()
+    sender_list = db.query(MessageModel).filter(MessageModel.receiver == user, MessageModel.sender == receiver).all()
     receiver_list += sender_list
     return receiver_list
