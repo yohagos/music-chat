@@ -2,7 +2,7 @@ from fastapi import status, HTTPException
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
-from schemas.messages import SendMessage
+from schemas.messages import SendMessage, LoadMessageFor
 from schemas.models import Messages as MessageModel, User as UserModel
 from utitlities.logged_in import get_user
 from utitlities.util import getTimeStamp
@@ -42,3 +42,9 @@ async def websocket_data_processing(data: dict, db: Session):
     db.commit()
     db.refresh(msg)
     return data
+
+async def load_messages(request: LoadMessageFor, db: Session):
+    receiver_list = db.query(MessageModel).filter(or_(MessageModel.sender == request.sender, MessageModel.receiver == request.receiver)).all()
+    sender_list = db.query(MessageModel).filter(or_(MessageModel.receiver == request.sender, MessageModel.receiver == request.sender)).all()
+    receiver_list += sender_list
+    return receiver_list

@@ -1,13 +1,14 @@
 from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect
 from sqlalchemy.orm import Session
 from typing import List
+import datetime
 
 from database.db import get_db
 from authentication.oauth2 import get_current_user
 
-from controller.messages import *
+from controller.messages import load_messages, get_user_messages, create_message, websocket_data_processing
 from schemas.users import UserBase
-from schemas.messages import *
+from schemas.messages import LoadMessageFor, ShowMessages, SendMessage
 
 router = APIRouter(
     prefix='/msg',
@@ -44,7 +45,5 @@ async def websocket_endpoint(websocket: WebSocket, db: Session = Depends(get_db)
             break
 
 @router.get('/ws/load')
-async def load_conversation():
-    pass
-    # load every msg between to users
-
+async def load_conversation(request: LoadMessageFor, db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
+    return load_messages(request, db)

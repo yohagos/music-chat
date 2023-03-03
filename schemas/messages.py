@@ -14,6 +14,10 @@ class SendMessage(BaseModel):
     receiver: str
     text: str
 
+class LoadMessageFor(BaseModel):
+    receiver: str
+    sender: str
+
 class ShowMessages(MessagesBase):
     class Config():
         orm_mode = True

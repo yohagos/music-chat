@@ -3,8 +3,6 @@ from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 from schemas.models import Music as MusicModel
-from schemas.music import MusicBase
-from controller.history import new_song_added
 from utitlities.logged_in import get_user
 from utitlities.util import getTimeStamp
 
@@ -19,7 +17,6 @@ def save_song(artist: str, title: str, genre: str, featuring: str, path: str, db
     db.add(new_song)
     db.commit()
     db.refresh(new_song)
-    new_song_added(user, new_song.id, db)
     return new_song
 
 def all_songs(db: Session):
@@ -34,10 +31,6 @@ def song_to_play(id: int, db: Session):
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
     fname = song.path.split('\\')
     return FileResponse(path=song.path, filename=fname[len(fname)-1], media_type='audio/mpeg')
-
-def songs_to_play(db: Session):
-
-    pass
 
 def delete_song(id: int, db: Session):
     user = get_user()

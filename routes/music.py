@@ -11,7 +11,6 @@ from controller.music import \
 from database.db import get_db
 from authentication.oauth2 import get_current_user
 from utitlities.util import create_file, createFoldersAndFilePaths
-from utitlities.logged_in import get_user
 
 router = APIRouter(
     prefix='/music',
