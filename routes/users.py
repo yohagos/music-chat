@@ -26,6 +26,7 @@ def get_all_users(db: Session = Depends(get_db), current_user: UserBase = Depend
 @router.get('/photo')
 async def user_photo(db: Session = Depends(get_db), current_user: UserBase = Depends(get_current_user)):
     file = get_profile_photo(db)
+    print(file)
     if os.path.exists(file.path):
         return FileResponse(path=file.path)
     return {'error': 'file does not exists'}

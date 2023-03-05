@@ -26,7 +26,6 @@ def post_message(request: SendMessage, db: Session = Depends(get_db), current_us
     
 @router.websocket('/ws')
 async def websocket_endpoint(websocket: WebSocket, db: Session = Depends(get_db)):
-    print('connection opened')
     await websocket.accept()
 
     while True:
