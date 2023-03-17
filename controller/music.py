@@ -20,7 +20,10 @@ def save_song(artist: str, title: str, genre: str, featuring: str, path: str, db
     return new_song
 
 def all_songs(db: Session):
-    return db.query(MusicModel).all()
+    list = db.query(MusicModel).all()
+    if not list:
+        raise HTTPException(status_code=status.HTTP_412_PRECONDITION_FAILED)
+    return list
 
 def all_songs_by_user(user: str, db: Session):
     return db.query(MusicModel).filter(MusicModel.uploaded_by == user).all()
