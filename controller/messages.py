@@ -41,4 +41,6 @@ async def load_messages(receiver: str, db: Session):
     receiver_list = db.query(MessageModel).filter(MessageModel.sender == user, MessageModel.receiver == receiver).all()
     sender_list = db.query(MessageModel).filter(MessageModel.receiver == user, MessageModel.sender == receiver).all()
     receiver_list += sender_list
+    for rec in receiver_list:
+        print(rec.sender, rec.text)
     return receiver_list
