@@ -39,8 +39,6 @@ def upload_photo(user: str, file_path: str, db: Session):
 def get_profile_photo(db: Session):
     username = get_user()
     user = db.query(UserModel).filter(UserModel.username == username).first()
-    if not user.profile_photo: 
-        raise HTTPException(status_code=status.HTTP_424_FAILED_DEPENDENCY)
     fname = user.profile_photo.split('\\')
     return FileResponse(path=user.profile_photo, filename=fname[len(fname)-1], media_type='image/jpg')
     
